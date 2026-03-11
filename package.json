@@ -1,0 +1,23 @@
+{
+  "name": "x402-payment-server-v2",
+  "version": "1.0.0",
+  "description": "x402 payment server using @1stdigital/prism-core — Railway-ready",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@1stdigital/prism-core": "*",
+    "@1stdigital/prism-express": "^2.0.3",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.4.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
