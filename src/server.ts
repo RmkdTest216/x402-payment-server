@@ -24,6 +24,7 @@ const prism = new PrismClient({
   apiKey:      PRISM_API_KEY,
   baseUrl:     FACILITATOR_URL,
   x402Version: 2,
+  debug:       true,   // ← verbose logging so Railway deploy logs show exact error
 });
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -77,7 +78,17 @@ function x402Guard(description: string) {
         mimeType: "application/json",
       });
     } catch (err: any) {
-      res.status(502).json({ error: "Could not reach Prism Gateway", details: err.message });
+      console.error("[x402Guard] getPaymentRequirements failed:", {
+        message:    err.message,
+        statusCode: err.statusCode,
+        details:    err.details,
+        stack:      err.stack?.split("\n")[0],
+      });
+      res.status(502).json({
+        error:      "Could not reach Prism Gateway",
+        details:    err.message,
+        statusCode: err.statusCode,
+      });
       return;
     }
 
