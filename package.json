@@ -9,8 +9,8 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
-    "@1stdigital/prism-core": "*",
-    "@1stdigital/prism-express": "^2.0.3",
+    "@1stdigital/prism-core": "file:./vendor/@1stdigital/prism-core",
+    "@1stdigital/prism-express": "file:./vendor/@1stdigital/prism-express",
     "dotenv": "^17.3.1",
     "express": "^5.2.1"
   },
