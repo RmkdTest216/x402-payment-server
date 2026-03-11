@@ -25,7 +25,17 @@ const prism = new PrismClient({
   apiKey:      PRISM_API_KEY,
   baseUrl:     FACILITATOR_URL,
   x402Version: 2,
-  debug:       true,   // ← verbose logging so Railway deploy logs show exact error
+  debug:       true,
+});
+
+// Prism Gateway sits behind Cloudflare bot protection.
+// Requests without browser-like headers get 403 "Just a moment...".
+// Inject them via the internal axios interceptor.
+(prism as any).client.interceptors.request.use((cfg: any) => {
+  cfg.headers["User-Agent"]      = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+  cfg.headers["Accept"]          = "application/json, text/plain, */*";
+  cfg.headers["Accept-Language"] = "en-US,en;q=0.9";
+  return cfg;
 });
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
