@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { PrismClient } from "@1stdigital/prism-core";
+import axios from "axios";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -175,6 +176,28 @@ app.get(
     });
   },
 );
+
+// ── Raw debug route — shows exact Prism Gateway response ───────────────────────
+app.get("/debug/prism", async (_req, res) => {
+  try {
+    const response = await axios.post(
+      `${FACILITATOR_URL}/api/v2/payment/requirements`,
+      {
+        resourceUrl:     "https://x402-payment-server-production.up.railway.app/api/x402/test",
+        requestedAmount: parsedPrice,
+        description:     "QA Test Endpoint for X402",
+        mimeType:        "application/json",
+      },
+      {
+        headers: { "X-API-Key": PRISM_API_KEY, "Content-Type": "application/json" },
+        validateStatus: () => true,   // don't throw on any HTTP status
+      },
+    );
+    res.json({ httpStatus: response.status, body: response.data });
+  } catch (err: any) {
+    res.json({ error: err.message, code: err.code });
+  }
+});
 
 app.get("/", (_req, res) => {
   res.json({
