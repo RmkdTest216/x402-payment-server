@@ -60,7 +60,10 @@ function findMatchingRequirement(accepts: any[], payload: any): any {
  */
 function x402Guard(description: string) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const resourceUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+    // Railway terminates TLS at the edge — use X-Forwarded-Proto to get the
+    // real scheme (https), otherwise req.protocol is always "http" internally.
+    const proto = req.get("X-Forwarded-Proto") || req.protocol;
+    const resourceUrl = `${proto}://${req.get("host")}${req.originalUrl}`;
 
     // Support v2 header name (PAYMENT-SIGNATURE) and v1 fallback (X-PAYMENT)
     const paymentHeader =
